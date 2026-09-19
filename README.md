@@ -45,6 +45,6 @@ pi install git:github.com/edisoncks/pi-notify-beep@v1.0.0
 ## Docs
 
 - `README.md` = user contract (what/usage/config). Keep 1-line behavior notes, no why.
-- `ARCHITECTURE.md` = design rationale (audio chain, caching, config, chime bytes, concurrency, platform notes).
+- `ARCHITECTURE.md` = contributor guide (mental model, code map, design decisions, invariants, recipes).
 - Code `why` comments = source of truth; docs summarize and point at code, don't duplicate verbatim.
 - Rule: behavior change updates README; why/how change updates `ARCHITECTURE.md` + code comment in the same commit.
