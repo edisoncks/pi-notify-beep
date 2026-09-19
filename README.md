@@ -2,13 +2,13 @@
 
 A Pi extension that plays a short chime when the agent finishes or needs input. TUI only.
 
+See `ARCHITECTURE.md` for design rationale.
+
 ## Install
 
 ```bash
 pi install git:github.com/edisoncks/pi-notify-beep@v1.0.0
 ```
-
-See `ARCHITECTURE.md` for design rationale.
 
 ## Behavior
 
