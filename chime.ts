@@ -3,13 +3,9 @@
 // Determinism over speed: explicit per-sample LE writes (no native-endian
 // Buffer.from aliasing), same bytes on LE/BE, all OSes. Do not "optimize"
 // to a bulk native-endian copy without a BE fallback.
-// Why no SHA pin: a beep's timbre doesn't depend on 1-LSB Math.sin drift
-// across V8 versions. Property asserts (valid RIFF/WAVE, mono 16-bit,
-// expected frames/peak) catch real breakage without a brittle byte-lock.
-export const CHIME_SR = 22050;
-// Expected total file length (44-byte header + PCM). Assert properties
-// (valid header, frame count, peak range), not a hash — see above.
-export const CHIME_LEN = 14156;
+// Deliberately no byte-hash pin: 1-LSB Math.sin drift across V8 versions is
+// inaudible, so locking bytes would be brittle for no benefit.
+const CHIME_SR = 22050;
 
 export function renderChime(): Buffer {
 	const SR = CHIME_SR;

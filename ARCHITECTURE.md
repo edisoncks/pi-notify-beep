@@ -87,8 +87,8 @@ respects the in-flight guard and the SSH rule.
 | Extension factory | per-instance state, `bundledSoundFile`, `soundFile`, `orderedPlayers`, `ensureChimeSync`, `beep` |
 | Pi wiring | `session_start`, `agent_settled`, `ui_prompt_start`, `/notify-beep` command |
 
-`chime.ts` generates the WAV data. It exports `CHIME_SR` (sample rate),
-`CHIME_LEN` (expected byte length), and `renderChime()`.
+`chime.ts` generates the WAV data. `renderChime()` is its only export; the
+sample rate and durations are module-private constants.
 
 ## Runtime lifecycle
 
@@ -287,10 +287,10 @@ healing; `status` and a normal session start do not create it.
 Samples use explicit `writeInt16LE` calls, which produce identical bytes
 on little-endian and big-endian hosts and avoid native-endian `Buffer`
 aliasing; do not replace this with a bulk native-endian copy without a
-big-endian fallback. There is no SHA pin: a 1-LSB `Math.sin` drift
-across V8 versions is inaudible, while structural checks (valid RIFF/WAVE
-header, expected frame count, peak range) catch real breakage without
-locking bytes.
+big-endian fallback. There is no byte-hash pin: a 1-LSB `Math.sin` drift
+across V8 versions is inaudible, so locking bytes would be brittle for no
+benefit. If a check is ever added, assert structure (valid RIFF/WAVE
+header, mono 16-bit, frame count, peak range) rather than a hash.
 
 **Trade-off.** First use in a session pays generation and write cost
 (about 0.5 ms).
@@ -330,8 +330,8 @@ in the decisions above.
    module-level globals; reloads must start clean.
 7. Keep `PLAYERS_BY_OS` entries frozen and key the winner cache by
    command string.
-8. Do not hash-lock the chime. Assert header, frame count, and peak
-   properties instead.
+8. Do not hash-lock the chime. If you add a check, assert structural
+   properties (header, frame count, peak) instead.
 9. Keep explicit little-endian sample writes unless a big-endian path is
    added at the same time.
 10. Keep playback fire-and-forget: `unref` the child process and timers.
@@ -354,9 +354,7 @@ in the decisions above.
 ### Change the chime
 
 1. Edit the synthesis constants in `chime.ts`.
-2. Update `CHIME_LEN` if the length changes.
-3. Keep structural assertions (header, frames, peak) instead of a hash.
-4. Update the "Sound" section in `README.md` if tones change audibly.
+2. Update the "Sound" section in `README.md` if tones change audibly.
 
 ### Add a trigger event
 
