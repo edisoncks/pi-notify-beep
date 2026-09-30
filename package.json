@@ -1,6 +1,6 @@
 {
   "name": "pi-notify-beep",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Pi extension that plays a short chime when the agent finishes or needs input.",
   "type": "module",
   "license": "MIT",

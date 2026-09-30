@@ -7,7 +7,7 @@ See `ARCHITECTURE.md` for design rationale.
 ## Install
 
 ```bash
-pi install git:github.com/edisoncks/pi-notify-beep@v1.0.0
+pi install git:github.com/edisoncks/pi-notify-beep@v1.0.1
 ```
 
 ## Behavior
