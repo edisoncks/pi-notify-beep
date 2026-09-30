@@ -301,11 +301,15 @@ export default function (pi: ExtensionAPI) {
 		const now = performance.now();
 		if (!opts?.force) {
 			if (now - lastBeep < DEBOUNCE_MS) return Promise.resolve();
-			lastBeep = now;
 		}
 		// force: bypass debounce entirely and don't touch lastBeep,
 		// so /notify-beep test never eats the next real notification.
 		if (isPlaying) return Promise.resolve();
+		// Stamp the debounce clock only for a beep we actually play. Setting it
+		// before the in-flight guard let a dropped event extend the window, so a
+		// later real notification (>1.5s after the last played chime) was
+		// silently swallowed — the same failure the force path already avoids.
+		if (!opts?.force) lastBeep = now;
 		isPlaying = true;
 		return (async () => {
 			try {
